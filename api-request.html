@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Request</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Получите параметр 'code' из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const code = urlParams.get('code');
+            const resultContainer = document.getElementById('result');
+
+            if (code) {
+                // Выполните запрос к API
+                const apiUrl = `http://pnode1.danbot.host:7668/rbxlink/?code=${code}`;
+
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json(); // Или response.text() в зависимости от формата ответа
+                    })
+                    .then(data => {
+                        // Обработайте данные и отобразите их
+                        resultContainer.textContent = JSON.stringify(data, null, 2);
+                    })
+                    .catch(error => {
+                        // Обработка ошибок
+                        resultContainer.textContent = `Error: ${error.message}`;
+                    });
+            } else {
+                resultContainer.textContent = 'Error: Missing code parameter.';
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>API Request Result</h1>
+    <pre id="result">Loading...</pre>
+</body>
+</html>
